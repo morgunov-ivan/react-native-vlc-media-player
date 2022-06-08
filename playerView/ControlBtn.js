@@ -79,23 +79,6 @@ export default class ControlBtn extends Component {
         <View style={styles.controlContainer}>
           <TouchableOpacity style={styles.controlContent} activeOpacity={1}>
             <View style={styles.controlContent2}>
-              <View style={styles.right}>
-                {
-                  showLeftButton ? (
-                    <TouchableOpacity
-                      activeOpacity={1}
-                      onPress={() => {
-                        onReplayPress && onReplayPress();
-                      }}
-                      style={{ width: 50, alignItems: 'center', justifyContent: 'center' }}>
-                      <Icon name={'replay'} size={30} color="#fff" />
-                    </TouchableOpacity>
-                  ) : <View style={{ width: 50 }} />
-                }
-                <Text
-                  style={{ fontSize: 11, color: '#fff' }}>       </Text>
-              </View>
-
               {
                 showMiddleButton && (
                   <TouchableOpacity
@@ -109,7 +92,7 @@ export default class ControlBtn extends Component {
                 )
               }
 
-              {/* {showSlider && totalTime > 0 &&(
+              {showSlider && totalTime > 0 &&(
                 <View
                   style={{
                     flex: 1,
@@ -145,7 +128,7 @@ export default class ControlBtn extends Component {
                   </Text>
                   </View>
                 </View>
-              )} */}
+              )}
 
               <View style={styles.right}>
                 <TouchableOpacity
@@ -244,10 +227,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   thumb: {
-    width: 6,
-    height: 18,
+    width: 16,
+    height: 16,
     backgroundColor: '#fff',
-    borderRadius: 4,
+    borderRadius: 8,
   },
   loading: {
     position: 'absolute',

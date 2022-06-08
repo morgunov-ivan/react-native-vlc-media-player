@@ -14,6 +14,7 @@ export default class VLCPlayer extends Component {
     this.seek = this.seek.bind(this);
     this.resume = this.resume.bind(this);
     this.snapshot = this.snapshot.bind(this);
+    this.subtitle = this.subtitle.bind(this);
     this._assignRoot = this._assignRoot.bind(this);
     this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
@@ -40,6 +41,12 @@ export default class VLCPlayer extends Component {
 
   resume(isResume) {
     this.setNativeProps({ resume: isResume });
+  }
+
+  subtitle(subtitle) {
+    console.log("SUBTITLE subtitle", subtitle)
+    this.setNativeProps({ subtitle });
+    
   }
 
   snapshot(path) {
@@ -187,6 +194,7 @@ VLCPlayer.propTypes = {
   poster: PropTypes.string,
   repeat: PropTypes.bool,
   muted: PropTypes.bool,
+  subtitle: PropTypes.string,
 
   onVideoLoadStart: PropTypes.func,
   onVideoError: PropTypes.func,

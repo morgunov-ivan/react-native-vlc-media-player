@@ -149,7 +149,10 @@ export default class VLCPlayerView extends Component {
           }
         }}>
         <VLCPlayer
-          ref={ref => (this.vlcPlayer = ref)}
+          ref={ref => {
+            this.setState({vlcPlayer:ref});
+            this.vlcPlayer = ref
+          }}
           paused={this.state.paused}
           //seek={this.state.seek}
           style={[styles.video]}
@@ -185,23 +188,21 @@ export default class VLCPlayerView extends Component {
                 justifyContent: 'center',
                 marginTop: 10,
               }}>
+                <Text>Reload</Text>
               <Icon name={'reload'} size={45} color="#fff" />
             </TouchableOpacity>
           </View>
         )}
         <View style={styles.topView}>
           <View style={styles.backBtn}>
-            {showBack && (
+            {(showBack && showControls) && (
               <TouchableOpacity
                 onPress={() => {
-                  if (isFull) {
-                    closeFullScreen && closeFullScreen();
-                  } else {
-                    onLeftPress && onLeftPress();
-                  }
+                  this.props.onLeftPress();
                 }}
                 style={styles.btn}
                 activeOpacity={0.8}>
+                  {/* <Text>chevron-left</Text> */}
                 <Icon name={'chevron-left'} size={30} color="#fff" />
               </TouchableOpacity>
             )}
@@ -467,6 +468,10 @@ export default class VLCPlayerView extends Component {
         });
       });*/
     }
+  }
+
+  getVLCRef = () => {
+    return this.vlcPlayer;
   }
 
   /**

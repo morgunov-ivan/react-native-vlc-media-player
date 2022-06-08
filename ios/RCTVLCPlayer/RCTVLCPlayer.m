@@ -127,6 +127,8 @@ static NSString *const playbackRate = @"rate";
     NSDictionary* initOptions = [source objectForKey:@"initOptions"];
 
     _player = [[VLCMediaPlayer alloc] init];
+    _player.libraryInstance.debugLogging = true;
+    _player.libraryInstance.debugLoggingLevel = 3;
     // [bavv edit end]
 
     [_player setDrawable:self];
@@ -262,6 +264,13 @@ static NSString *const playbackRate = @"rate";
             [_player setPosition:pos];
         }
     }
+}
+
+-(void)setSubtitle:(NSString*)subtitle{
+    NSURL *_url = [NSURL URLWithString:subtitle];
+    NSInteger *_sub = [_player addPlaybackSlave:_url type:VLCMediaPlaybackSlaveTypeSubtitle enforce:true];
+    NSArray *subs = [_player videoSubTitlesNames];
+    NSInteger *x = [_player currentVideoSubTitleIndex];
 }
 
 -(void)setSnapshotPath:(NSString*)path
