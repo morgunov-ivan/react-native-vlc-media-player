@@ -155,6 +155,36 @@ static NSString *const playbackRate = @"rate";
         [self play];
 }
 
+- (void)onVideoTracks {
+    if(_player){
+        NSArray *tracksNames = [_player audioTrackNames];
+        NSArray *tracksIndexes = [_player audioTrackIndexes];
+        int currentTrackIndex = [_player currentAudioTrackIndex];
+        
+        self.onVideoAudioTracks(@{
+            @"target": self.reactTag,
+            @"trackNames": tracksNames,
+            @"trackIndexes": tracksIndexes,
+            @"currentTrackIndex":[NSNumber numberWithInt:currentTrackIndex]
+                                });
+    }
+}
+
+- (void)onSubtitles {
+    if(_player){
+        NSArray *subtitleNames = [_player videoSubTitlesNames];
+        NSArray *subtitleIndexes = [_player videoSubTitlesIndexes];
+        int currentSubtitleIndex = [_player currentVideoSubTitleIndex];
+        
+        self.onVideoSubtitles(@{
+            @"target": self.reactTag,
+            @"subtitleNames": subtitleNames,
+            @"subtitleIndexes": subtitleIndexes,
+            @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex]
+                                });
+    }
+}
+
 - (void)mediaPlayerTimeChanged:(NSNotification *)aNotification
 {
     [self updateVideoProgress];
@@ -193,6 +223,8 @@ static NSString *const playbackRate = @"rate";
                 self.onVideoBuffering(@{
                                         @"target": self.reactTag
                                         });
+                [self onVideoTracks];
+                [self onSubtitles];
                 break;
             case VLCMediaPlayerStatePlaying:
                 _paused = NO;
@@ -281,6 +313,20 @@ static NSString *const playbackRate = @"rate";
 {
     if(_player)
         [_player saveVideoSnapshotAt:path withWidth:0 andHeight:0];
+}
+
+- (void)setCurrentAudioTrackIndex:(NSInteger*)index
+{
+    if(_player){
+        [_player setCurrentAudioTrackIndex:index];
+    }
+}
+
+- (void)setCurrentVideoSubTitleIndex:(NSInteger*)index
+{
+    if(_player){
+        [_player setCurrentVideoSubTitleIndex:index];
+    }
 }
 
 -(void)setRate:(float)rate

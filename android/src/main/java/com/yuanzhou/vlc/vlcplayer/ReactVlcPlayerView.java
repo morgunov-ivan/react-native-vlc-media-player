@@ -5,16 +5,19 @@ import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.media.AudioManager;
 import android.net.Uri;
+
 import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
+
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.LifecycleEventListener;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.facebook.react.bridge.WritableArray;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ThemedReactContext;
 
@@ -24,9 +27,7 @@ import org.videolan.libvlc.Media;
 import org.videolan.libvlc.MediaPlayer;
 
 import java.util.ArrayList;
-
-
-
+import java.util.Arrays;
 
 
 @SuppressLint("ViewConstructor")
@@ -223,6 +224,8 @@ class ReactVlcPlayerView extends TextureView implements
                 case MediaPlayer.Event.Playing:
                     map.putString("type", "Playing");
                     eventEmitter.sendEvent(map, VideoEventEmitter.EVENT_ON_IS_PLAYING);
+                    onVideoAudioTracks();
+                    onVideoSubtitles();
                     break;
                 case MediaPlayer.Event.Opening:
                     map.putString("type", "Opening");
@@ -623,26 +626,81 @@ class ReactVlcPlayerView extends TextureView implements
             }
         }
     };
+    
+    public void onVideoAudioTracks() {
+        if(mMediaPlayer != null) {
+            WritableMap map = Arguments.createMap();
+            WritableArray trackIndexes = Arguments.createArray();
+            WritableArray trackNames = Arguments.createArray();
+
+            MediaPlayer.TrackDescription[] tracks =  mMediaPlayer.getAudioTracks();
+            int currentAudioTrackIndex = mMediaPlayer.getAudioTrack();
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N && tracks != null) {
+                Arrays.stream(tracks).forEach(t -> {
+                    trackIndexes.pushInt(t.id);
+                    trackNames.pushString(t.name);
+                });
+            }
+            map.putArray("trackIndexes", trackIndexes);
+            map.putArray("trackNames", trackNames);
+            map.putInt("currentTrackIndex",currentAudioTrackIndex);
+
+            eventEmitter.sendEvent(map,VideoEventEmitter.EVENT_ON_AUDIO_TRACKS);
+        }
+    }
+
+    public void onVideoSubtitles() {
+        if(mMediaPlayer != null) {
+            WritableMap map = Arguments.createMap();
+            WritableArray subtitleIndexes = Arguments.createArray();
+            WritableArray subtitleNames = Arguments.createArray();
+
+            MediaPlayer.TrackDescription[] subtitles =  mMediaPlayer.getSpuTracks();
+            int currentVideoSubTitleIndex = mMediaPlayer.getSpuTrack();
+
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N && subtitles != null) {
+                Arrays.stream(subtitles).forEach(t -> {
+                    subtitleIndexes.pushInt(t.id);
+                    subtitleNames.pushString(t.name);
+                });
+            }
+            map.putArray("subtitleIndexes", subtitleIndexes);
+            map.putArray("subtitleNames", subtitleNames);
+            map.putInt("currentVideoSubTitleIndex",currentVideoSubTitleIndex);
+
+            eventEmitter.sendEvent(map,VideoEventEmitter.EVENT_ON_VIDEO_SUBTITLES);
+        }
+    }
+
+    public void setVideoTrackIndex(int index) {
+        if(mMediaPlayer != null) {
+            mMediaPlayer.setAudioTrack(index);
+        }
+    }
+
+    public void setVideoSubtitleIndex(int index) {
+        if(mMediaPlayer != null) {
+            mMediaPlayer.setSpuTrack(index);
+        }
+    }
+
 
     /*private void changeSurfaceSize(boolean message) {
-
         if (mMediaPlayer != null) {
             final IVLCVout vlcVout = mMediaPlayer.getVLCVout();
             vlcVout.setWindowSize(screenWidth, screenHeight);
         }
-
         double displayWidth = screenWidth, displayHeight = screenHeight;
-
         if (screenWidth < screenHeight) {
             displayWidth = screenHeight;
             displayHeight = screenWidth;
         }
-
         // sanity check
         if (displayWidth * displayHeight <= 1 || mVideoWidth * mVideoHeight <= 1) {
             return;
         }
-
         // compute the aspect ratio
         double aspectRatio, visibleWidth;
         if (mSarDen == mSarNum) {
@@ -654,12 +712,9 @@ class ReactVlcPlayerView extends TextureView implements
             visibleWidth = mVideoVisibleWidth * (double) mSarNum / mSarDen;
             aspectRatio = visibleWidth / mVideoVisibleHeight;
         }
-
         // compute the display aspect ratio
         double displayAspectRatio = displayWidth / displayHeight;
-
         counter ++;
-
         switch (mCurrentSize) {
             case SURFACE_BEST_FIT:
                 if(counter > 2)
@@ -702,14 +757,11 @@ class ReactVlcPlayerView extends TextureView implements
                 displayWidth = visibleWidth;
                 break;
         }
-
         // set display size
         int finalWidth = (int) Math.ceil(displayWidth * mVideoWidth / mVideoVisibleWidth);
         int finalHeight = (int) Math.ceil(displayHeight * mVideoHeight / mVideoVisibleHeight);
-
         SurfaceHolder holder = this.getHolder();
         holder.setFixedSize(finalWidth, finalHeight);
-
         ViewGroup.LayoutParams lp = this.getLayoutParams();
         lp.width = finalWidth;
         lp.height = finalHeight;

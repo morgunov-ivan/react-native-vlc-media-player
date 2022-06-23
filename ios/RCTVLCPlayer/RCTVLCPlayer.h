@@ -13,6 +13,8 @@
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoError;
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoOpen;
 @property (nonatomic, copy) RCTBubblingEventBlock onVideoLoadStart;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoAudioTracks;
+@property (nonatomic, copy) RCTDirectEventBlock onVideoSubtitles;
 
 
 - (instancetype)initWithEventDispatcher:(RCTEventDispatcher *)eventDispatcher NS_DESIGNATED_INITIALIZER;
