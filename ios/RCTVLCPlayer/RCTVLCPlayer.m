@@ -309,6 +309,13 @@ static NSString *const playbackRate = @"rate";
     }
 }
 
+-(void)setTrackIndex:(int)index{
+    if(_player){
+        [_player setCurrentAudioTrackIndex:index];
+        [self onVideoTracks];
+    }
+}
+
 -(void)setSubtitle:(NSString*)subtitle{
     NSURL *_url = [NSURL URLWithString:subtitle];
     [_player addPlaybackSlave:_url type:VLCMediaPlaybackSlaveTypeSubtitle enforce:true];

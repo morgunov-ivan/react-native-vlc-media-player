@@ -43,6 +43,8 @@ RCT_EXPORT_VIEW_PROPERTY(currentAudioTrackIndex, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(currentVideoSubTitleIndex, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(subtitle, NSString);
 RCT_EXPORT_VIEW_PROPERTY(subtitleIndex, int);
+RCT_EXPORT_VIEW_PROPERTY(trackIndex, int);
+
 RCT_CUSTOM_VIEW_PROPERTY(muted, BOOL, RCTVLCPlayer)
 {
     BOOL isMuted = [RCTConvert BOOL:json];

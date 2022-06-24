@@ -21,6 +21,7 @@ export default class VLCPlayer extends Component {
     this._onProgress = this._onProgress.bind(this);
     this._onEnded = this._onEnded.bind(this);
     this.subtitleIndex = this.subtitleIndex.bind(this);
+    this.trackIndex = this.trackIndex.bind(this);
     this._onPlaying = this._onPlaying.bind(this);
     this._onStopped = this._onStopped.bind(this);
     this._onPaused = this._onPaused.bind(this);
@@ -74,6 +75,10 @@ export default class VLCPlayer extends Component {
 
   subtitleIndex(subtitleIndex){
     this.setNativeProps({subtitleIndex})
+  }
+
+  trackIndex(trackIndex){
+    this.setNativeProps({trackIndex})
   }
 
   snapshot(path) {
