@@ -26,6 +26,7 @@ RCT_EXPORT_VIEW_PROPERTY(onVideoLoadStart, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onVideoAudioTracks, RCTDirectEventBlock);
 RCT_EXPORT_VIEW_PROPERTY(onVideoSubtitles, RCTDirectEventBlock);
 
+
 - (dispatch_queue_t)methodQueue
 {
     return dispatch_get_main_queue();
@@ -41,6 +42,7 @@ RCT_EXPORT_VIEW_PROPERTY(snapshotPath, NSString);
 RCT_EXPORT_VIEW_PROPERTY(currentAudioTrackIndex, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(currentVideoSubTitleIndex, NSInteger);
 RCT_EXPORT_VIEW_PROPERTY(subtitle, NSString);
+RCT_EXPORT_VIEW_PROPERTY(subtitleIndex, int);
 RCT_CUSTOM_VIEW_PROPERTY(muted, BOOL, RCTVLCPlayer)
 {
     BOOL isMuted = [RCTConvert BOOL:json];

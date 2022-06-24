@@ -302,11 +302,17 @@ static NSString *const playbackRate = @"rate";
     }
 }
 
+-(void)setSubtitleIndex:(int)index{
+    if(_player){
+        [_player setCurrentVideoSubTitleIndex:index];
+        [self onSubtitles];
+    }
+}
+
 -(void)setSubtitle:(NSString*)subtitle{
     NSURL *_url = [NSURL URLWithString:subtitle];
-    NSInteger *_sub = [_player addPlaybackSlave:_url type:VLCMediaPlaybackSlaveTypeSubtitle enforce:true];
-    NSArray *subs = [_player videoSubTitlesNames];
-    NSInteger *x = [_player currentVideoSubTitleIndex];
+    [_player addPlaybackSlave:_url type:VLCMediaPlaybackSlaveTypeSubtitle enforce:true];
+    [self onSubtitles];
 }
 
 -(void)setSnapshotPath:(NSString*)path

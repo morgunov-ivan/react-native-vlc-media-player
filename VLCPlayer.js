@@ -20,6 +20,7 @@ export default class VLCPlayer extends Component {
     this._onError = this._onError.bind(this);
     this._onProgress = this._onProgress.bind(this);
     this._onEnded = this._onEnded.bind(this);
+    this.subtitleIndex = this.subtitleIndex.bind(this);
     this._onPlaying = this._onPlaying.bind(this);
     this._onStopped = this._onStopped.bind(this);
     this._onPaused = this._onPaused.bind(this);
@@ -27,21 +28,21 @@ export default class VLCPlayer extends Component {
     this._onOpen = this._onOpen.bind(this);
     this._onLoadStart = this._onLoadStart.bind(this);
     this.changeVideoAspectRatio = this.changeVideoAspectRatio.bind(this);
-    this._onAudioTracks = this._onAudioTracks.bind(this);
+    this._onVideoAudioTracks = this._onVideoAudioTracks.bind(this);
     this._onVideoSubtitles = this._onVideoSubtitles.bind(this);
   }
   static defaultProps = {
     autoplay: true,
   };
 
-  _onAudioTracks(event) {
+  _onVideoAudioTracks(event) {
     if (this.props.onAudioTracks) {
       this.props.onAudioTracks(event.nativeEvent);
     }
   }
   
   _onVideoSubtitles(event) {
-    if (this.props.onAudioTracks) {
+    if (this.props.onSubtitles) {
       this.props.onSubtitles(event.nativeEvent);
     }
   }
@@ -68,9 +69,11 @@ export default class VLCPlayer extends Component {
   }
 
   subtitle(subtitle) {
-    console.log("SUBTITLE subtitle", subtitle)
-    this.setNativeProps({ subtitle });
-    
+    this.setNativeProps({ subtitle });  
+  }
+
+  subtitleIndex(subtitleIndex){
+    this.setNativeProps({subtitleIndex})
   }
 
   snapshot(path) {
