@@ -37,6 +37,7 @@ public class ReactVlcPlayerViewManager extends SimpleViewManager<ReactVlcPlayerV
     private static final String PROP_CURRENT_AUDIO_TRACK_INDEX = "currentAudioTrackIndex";
     private static final String PROP_CURRENT_VIDEO_SUB_TITLE_INDEX = "currentVideoSubTitleIndex";
     private static final String PROP_SLAVE = "videoSubtitleSlave";
+    private static final String PROP_SUBTITLE_DELAY = "delay";
 
     @Override
     public String getName() {
@@ -158,6 +159,11 @@ public class ReactVlcPlayerViewManager extends SimpleViewManager<ReactVlcPlayerV
     @ReactProp(name = PROP_SLAVE)
     public void setVideoSubtitleSlave(final ReactVlcPlayerView videoView, final String videoSubtitleSlave) {
         videoView.setVideoSubtitleSlave(videoSubtitleSlave);
+    }
+
+    @ReactProp(name = PROP_SUBTITLE_DELAY)
+    public void setVideoSubtitleDelay(final ReactVlcPlayerView videoView, final double delay) {
+        videoView.setVideoSubtitleDelay(delay);
     }
 
 
