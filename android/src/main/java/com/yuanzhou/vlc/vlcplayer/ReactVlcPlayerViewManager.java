@@ -36,7 +36,7 @@ public class ReactVlcPlayerViewManager extends SimpleViewManager<ReactVlcPlayerV
     private static final String PROP_PROGRESS_UPDATE_INTERVAL = "progressUpdateInterval";
     private static final String PROP_CURRENT_AUDIO_TRACK_INDEX = "currentAudioTrackIndex";
     private static final String PROP_CURRENT_VIDEO_SUB_TITLE_INDEX = "currentVideoSubTitleIndex";
-
+    private static final String PROP_SLAVE = "videoSubtitleSlave";
 
     @Override
     public String getName() {
@@ -153,6 +153,11 @@ public class ReactVlcPlayerViewManager extends SimpleViewManager<ReactVlcPlayerV
     @ReactProp(name = PROP_CURRENT_VIDEO_SUB_TITLE_INDEX)
     public void setVideoSubtitleIndex(final ReactVlcPlayerView videoView, final int currentVideoSubTitleIndex) {
         videoView.setVideoSubtitleIndex(currentVideoSubTitleIndex);
+    }
+
+    @ReactProp(name = PROP_SLAVE)
+    public void setVideoSubtitleSlave(final ReactVlcPlayerView videoView, final String videoSubtitleSlave) {
+        videoView.setVideoSubtitleSlave(videoSubtitleSlave);
     }
 
 

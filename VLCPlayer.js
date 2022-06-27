@@ -31,6 +31,8 @@ export default class VLCPlayer extends Component {
     this.changeVideoAspectRatio = this.changeVideoAspectRatio.bind(this);
     this._onVideoAudioTracks = this._onVideoAudioTracks.bind(this);
     this._onVideoSubtitles = this._onVideoSubtitles.bind(this);
+    this.videoSubtitleIndex = this.videoSubtitleIndex.bind(this);
+    this.setVideoSubtitleSlave = this.setVideoSubtitleSlave.bind(this);
   }
   static defaultProps = {
     autoplay: true,
@@ -53,6 +55,9 @@ export default class VLCPlayer extends Component {
     this._root.setNativeProps(nativeProps);
   }
 
+  setVideoSubtitleSlave(videoSubtitleSlave) {
+    this.setNativeProps({videoSubtitleSlave})
+  }
   currentAudioTrackIndex(index) {
     this.setNativeProps({currentAudioTrackIndex: index});
   }
@@ -75,6 +80,10 @@ export default class VLCPlayer extends Component {
 
   subtitleIndex(subtitleIndex){
     this.setNativeProps({subtitleIndex})
+  }
+
+  videoSubtitleIndex(videoSubtitleIndex){
+    this.setNativeProps({currentVideoSubTitleIndex:videoSubtitleIndex})
   }
 
   trackIndex(trackIndex){
