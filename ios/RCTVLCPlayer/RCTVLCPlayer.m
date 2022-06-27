@@ -175,13 +175,15 @@ static NSString *const playbackRate = @"rate";
         NSArray *subtitleNames = [_player videoSubTitlesNames];
         NSArray *subtitleIndexes = [_player videoSubTitlesIndexes];
         int currentSubtitleIndex = [_player currentVideoSubTitleIndex];
+        float delay = [_player currentVideoSubTitleDelay];
         
         self.onVideoSubtitles(@{
             @"target": self.reactTag,
             @"subtitleNames": subtitleNames,
             @"subtitleIndexes": subtitleIndexes,
-            @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex]
-                                });
+            @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex],
+            @"delay":[NSNumber numberWithFloat:delay]
+        });
     }
 }
 
@@ -251,9 +253,9 @@ static NSString *const playbackRate = @"rate";
                 break;
             case VLCMediaPlayerStateError:
                 NSLog(@"VLCMediaPlayerStateError %i",1);
-                self.onVideoError(@{
-                                    @"target": self.reactTag
-                                    });
+//                self.onVideoError(@{
+//                                    @"target": self.reactTag
+//                                    });
                 [self _release];
                 break;
             default:
@@ -299,6 +301,13 @@ static NSString *const playbackRate = @"rate";
         if(pos>=0 && pos <= 1){
             [_player setPosition:pos];
         }
+    }
+}
+
+-(void)setDelay:(NSInteger)delay{
+    if(_player){
+        [_player setCurrentVideoSubTitleDelay:delay];
+        [self onSubtitles];
     }
 }
 

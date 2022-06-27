@@ -12,6 +12,7 @@ export default class VLCPlayer extends Component {
   constructor(props, context) {
     super(props, context);
     this.seek = this.seek.bind(this);
+    this.delay = this.delay.bind(this);
     this.resume = this.resume.bind(this);
     this.snapshot = this.snapshot.bind(this);
     this.subtitle = this.subtitle.bind(this);
@@ -68,6 +69,10 @@ export default class VLCPlayer extends Component {
 
   seek(pos) {
     this.setNativeProps({ seek: pos });
+  }
+
+  delay(delay){
+    this.setNativeProps({delay});
   }
 
   resume(isResume) {
