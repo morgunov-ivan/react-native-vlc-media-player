@@ -673,8 +673,8 @@ class ReactVlcPlayerView extends TextureView implements
 
             map.putArray("subtitleIndexes", subtitleIndexes);
             map.putArray("subtitleNames", subtitleNames);
-            double d = delay.doubleValue();
-            map.putDouble("delay",d);
+            // double d = delay.doubleValue();
+            map.putDouble("delay",delay);
             map.putInt("currentSubtitleIndex",currentVideoSubTitleIndex);
 
             eventEmitter.sendEvent(map,VideoEventEmitter.EVENT_ON_VIDEO_SUBTITLES);
@@ -697,7 +697,8 @@ class ReactVlcPlayerView extends TextureView implements
 
     public void setVideoSubtitleDelay(Double delay) {
         if(mMediaPlayer != null) {
-            mMediaPlayer.setSpuDelay(delay);
+            long otherDelay = new Double(delay).longValue();
+            mMediaPlayer.setSpuDelay(otherDelay);
             onVideoSubtitles();
         }
     }
