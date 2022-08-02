@@ -1,8 +1,8 @@
-#import "React/RCTConvert.h"
+#import <React/RCTConvert.h>
 #import "RCTVLCPlayer.h"
-#import "React/RCTBridgeModule.h"
-#import "React/RCTEventDispatcher.h"
-#import "React/UIView+React.h"
+#import <React/RCTBridgeModule.h>
+#import <React/RCTEventDispatcher.h>
+#import <React/UIView+React.h>
 #if TARGET_OS_TV
     #import <TVVLCKit/TVVLCKit.h>
 #else
@@ -270,8 +270,7 @@ static NSString *const playbackRate = @"rate";
         int currentTime   = [[_player time] intValue];
         int remainingTime = [[_player remainingTime] intValue];
         int duration      = [_player.media.length intValue];
-
-        if( currentTime >= 0 && currentTime < duration) {
+        if( currentTime >= 0 ) {
             self.onVideoProgress(@{
                                    @"target": self.reactTag,
                                    @"currentTime": [NSNumber numberWithInt:currentTime],
