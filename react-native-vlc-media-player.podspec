@@ -13,5 +13,5 @@ Pod::Spec.new do |s|
   s.static_framework = true
   s.dependency 'React'
   s.ios.dependency 'MobileVLCKit', '3.4.1b9'
-  s.tvos.dependency 'TVVLCKit', '3.3.17'
+  s.tvos.dependency 'TVVLCKit', '3.4.1b11'
 end
