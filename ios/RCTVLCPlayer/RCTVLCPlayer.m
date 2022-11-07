@@ -160,13 +160,13 @@ static NSString *const playbackRate = @"rate";
         NSArray *tracksNames = [_player audioTrackNames];
         NSArray *tracksIndexes = [_player audioTrackIndexes];
         int currentTrackIndex = [_player currentAudioTrackIndex];
-        
-        self.onVideoAudioTracks(@{
-            @"target": self.reactTag,
-            @"trackNames": tracksNames,
-            @"trackIndexes": tracksIndexes,
-            @"currentTrackIndex":[NSNumber numberWithInt:currentTrackIndex]
-                                });
+
+//         self.onVideoAudioTracks(@{
+//             @"target": self.reactTag,
+//             @"trackNames": tracksNames,
+//             @"trackIndexes": tracksIndexes,
+//             @"currentTrackIndex":[NSNumber numberWithInt:currentTrackIndex]
+//                                 });
     }
 }
 
@@ -176,14 +176,14 @@ static NSString *const playbackRate = @"rate";
         NSArray *subtitleIndexes = [_player videoSubTitlesIndexes];
         int currentSubtitleIndex = [_player currentVideoSubTitleIndex];
         float delay = [_player currentVideoSubTitleDelay];
-        
-        self.onVideoSubtitles(@{
-            @"target": self.reactTag,
-            @"subtitleNames": subtitleNames,
-            @"subtitleIndexes": subtitleIndexes,
-            @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex],
-            @"delay":[NSNumber numberWithFloat:delay]
-        });
+
+//         self.onVideoSubtitles(@{
+//             @"target": self.reactTag,
+//             @"subtitleNames": subtitleNames,
+//             @"subtitleIndexes": subtitleIndexes,
+//             @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex],
+//             @"delay":[NSNumber numberWithFloat:delay]
+//         });
     }
 }
 
