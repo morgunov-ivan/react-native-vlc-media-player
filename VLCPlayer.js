@@ -3,7 +3,7 @@ import ReactNative from "react-native";
 
 const { Component } = React;
 
-import PropTypes from "prop-types";
+import PropTypes from "deprecated-react-native-prop-types";
 
 const { StyleSheet, requireNativeComponent, NativeModules, View } = ReactNative;
 import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
@@ -44,7 +44,7 @@ export default class VLCPlayer extends Component {
       this.props.onAudioTracks(event.nativeEvent);
     }
   }
-  
+
   _onVideoSubtitles(event) {
     if (this.props.onSubtitles) {
       this.props.onSubtitles(event.nativeEvent);
@@ -80,7 +80,7 @@ export default class VLCPlayer extends Component {
   }
 
   subtitle(subtitle) {
-    this.setNativeProps({ subtitle });  
+    this.setNativeProps({ subtitle });
   }
 
   subtitleIndex(subtitleIndex){
