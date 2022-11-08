@@ -3,7 +3,7 @@ import ReactNative from "react-native";
 
 const { Component } = React;
 
-import PropTypes from "deprecated-react-native-prop-types";
+import PropTypes from "react-native";
 
 const { StyleSheet, requireNativeComponent, NativeModules, View } = ReactNative;
 import resolveAssetSource from "react-native/Libraries/Image/resolveAssetSource";
