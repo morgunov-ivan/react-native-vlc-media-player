@@ -265,7 +265,7 @@ static NSString *const playbackRate = @"rate";
                                       });
                 break;
             case VLCMediaPlayerStateBuffering:
-                self.onVideoBuffering(@{@"target": self.reactTag
+                self.onVideoBuffering(@{@"target": self.reactTag,
                                       @"target": self.reactTag,
                                       @"isPlaying": [NSNumber numberWithBool: isPlaying]
                                       });
