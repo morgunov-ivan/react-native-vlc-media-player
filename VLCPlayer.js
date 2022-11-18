@@ -30,7 +30,7 @@ export default class VLCPlayer extends Component {
     this._onOpen = this._onOpen.bind(this);
     this._onLoadStart = this._onLoadStart.bind(this);
     this.changeVideoAspectRatio = this.changeVideoAspectRatio.bind(this);
-    this._onVideoAudioTracks = this._onVideoAudioTracks.bind(this);
+    this._onAudioTracks = this._onAudioTracks.bind(this);
     this._onVideoSubtitles = this._onVideoSubtitles.bind(this);
     this.videoSubtitleIndex = this.videoSubtitleIndex.bind(this);
     this.setVideoSubtitleSlave = this.setVideoSubtitleSlave.bind(this);
@@ -39,7 +39,7 @@ export default class VLCPlayer extends Component {
     autoplay: true,
   };
 
-  _onVideoAudioTracks(event) {
+  _onAudioTracks(event) {
     if (this.props.onAudioTracks) {
       this.props.onAudioTracks(event.nativeEvent);
     }
@@ -214,6 +214,8 @@ export default class VLCPlayer extends Component {
       onVideoPaused: this._onPaused,
       onVideoStopped: this._onStopped,
       onVideoBuffering: this._onBuffering,
+      onVideoAudioTracks: this._onAudioTracks,
+      onVideoSubtitles: this._onVideoSubtitles,
       progressUpdateInterval: 250,
     });
 

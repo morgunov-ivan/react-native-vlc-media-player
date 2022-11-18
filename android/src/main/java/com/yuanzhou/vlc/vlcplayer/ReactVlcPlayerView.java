@@ -166,12 +166,12 @@ class ReactVlcPlayerView extends TextureView implements
                         map.putDouble("duration", totalLength);
                         eventEmitter.sendEvent(map, VideoEventEmitter.EVENT_PROGRESS);
                     }
-                    mProgressUpdateHandler.postDelayed(mProgressUpdateRunnable, Math.round(mProgressUpdateInterval));    
+                    mProgressUpdateHandler.postDelayed(mProgressUpdateRunnable, Math.round(mProgressUpdateInterval));
                 }
             };
             mProgressUpdateHandler.postDelayed(mProgressUpdateRunnable,0);
         }
-            
+
     }
 
 
@@ -628,7 +628,7 @@ class ReactVlcPlayerView extends TextureView implements
             }
         }
     };
-    
+
     public void onVideoAudioTracks() {
         if(mMediaPlayer != null) {
             WritableMap map = Arguments.createMap();
@@ -675,7 +675,7 @@ class ReactVlcPlayerView extends TextureView implements
             map.putArray("subtitleNames", subtitleNames);
             // double d = delay.doubleValue();
             map.putDouble("delay",delay);
-            map.putInt("currentSubtitleIndex",currentVideoSubTitleIndex);
+            map.putInt("currentVideoSubTitleIndex",currentVideoSubTitleIndex);
 
             eventEmitter.sendEvent(map,VideoEventEmitter.EVENT_ON_VIDEO_SUBTITLES);
         }
@@ -684,14 +684,12 @@ class ReactVlcPlayerView extends TextureView implements
     public void setVideoTrackIndex(int index) {
         if(mMediaPlayer != null) {
             mMediaPlayer.setAudioTrack(index);
-            onVideoAudioTracks();
         }
     }
 
     public void setVideoSubtitleIndex(int index) {
         if(mMediaPlayer != null) {
             mMediaPlayer.setSpuTrack(index);
-            onVideoSubtitles();
         }
     }
 

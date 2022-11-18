@@ -3,6 +3,7 @@
 #import <React/RCTBridgeModule.h>
 #import <React/RCTEventDispatcher.h>
 #import <React/UIView+React.h>
+#import <React/RCTLog.h>
 #if TARGET_OS_TV
     #import <TVVLCKit/TVVLCKit.h>
 #else
@@ -90,69 +91,116 @@ static NSString *const playbackRate = @"rate";
 
 -(void)setResume:(BOOL)autoplay
 {
-    if(_player){
-        [self _release];
+    @try{
+            char * videoRatio = nil;
+            if(_player){
+                videoRatio = _player.videoAspectRatio;
+                [_player stop];
+                _player = nil;
+            }
+            NSMutableDictionary* mediaOptions = [_source objectForKey:@"mediaOptions"];
+            NSArray* options = [_source objectForKey:@"initOptions"];
+            NSString* uri    = [_source objectForKey:@"uri"];
+            NSInteger initType = [RCTConvert NSInteger:[_source objectForKey:@"initType"]];
+            BOOL autoplay = [RCTConvert BOOL:[_source objectForKey:@"autoplay"]];
+            BOOL isNetWork   = [RCTConvert BOOL:[_source objectForKey:@"isNetwork"]];
+            NSURL* _uri    = [NSURL URLWithString:uri];
+            if(uri && uri.length > 0){
+                // init player && play
+                if(initType == 2){
+                    _player = [[VLCMediaPlayer alloc] initWithOptions:options];
+                }else{
+                    _player = [[VLCMediaPlayer alloc] init];
+                }
+                [_player setDrawable:self];
+                _player.delegate = self;
+                _player.scaleFactor = 0;
+                //设置缓存多少毫秒
+                // [mediaDictonary setObject:@"1500" forKey:@"network-caching"];
+                VLCMedia *media = nil;
+                if(isNetWork){
+                    media = [VLCMedia mediaWithURL:_uri];
+                }else{
+                    media = [VLCMedia mediaWithPath: uri];
+                }
+                media.delegate = self;
+                if(mediaOptions){
+                    [media addOptions:mediaOptions];
+                }
+                /*if(videoRatio){
+                    _player.videoAspectRatio = videoRatio;
+                }*/
+                [media parseWithOptions:VLCMediaParseLocal|VLCMediaFetchLocal|VLCMediaParseNetwork|VLCMediaFetchNetwork];
+                _player.media = media;
+                if(autoplay)
+                    [self play];
+                if(self.onVideoLoadStart){
+                    self.onVideoLoadStart(@{
+                                            @"target": self.reactTag
+                                            });
+                }
+            }
+        }
+    @catch(NSException *exception){
+            NSLog(@"%@", exception);
     }
-    // [bavv edit start]
-    NSString* uri    = [_source objectForKey:@"uri"];
-    NSURL* _uri    = [NSURL URLWithString:uri];
-    NSDictionary* initOptions = [_source objectForKey:@"initOptions"];
 
-    _player = [[VLCMediaPlayer alloc] init];
-	// [bavv edit end]
 
-    [_player setDrawable:self];
-    _player.delegate = self;
-    _player.scaleFactor = 0;
-    VLCMedia *media = [VLCMedia mediaWithURL:_uri];
-
-    for (NSString* option in initOptions) {
-        [media addOption:[option stringByReplacingOccurrencesOfString:@"--" withString:@""]];
-    }
-
-    _player.media = media;
-    [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    NSLog(@"autoplay: %i",autoplay);
-    self.onVideoLoadStart(@{
-                            @"target": self.reactTag
-                            });
 }
 
 -(void)setSource:(NSDictionary *)source
 {
-    if(_player){
-        [self _release];
+    @try{
+            if(_player){
+                [_player stop];
+                _player = nil;
+            }
+            _source = source;
+            NSMutableDictionary* mediaOptions = [source objectForKey:@"mediaOptions"];
+            NSArray* options = [source objectForKey:@"initOptions"];
+            NSString* uri    = [source objectForKey:@"uri"];
+            NSInteger initType = [RCTConvert NSInteger:[source objectForKey:@"initType"]];
+            BOOL autoplay = [RCTConvert BOOL:[source objectForKey:@"autoplay"]];
+            BOOL isNetWork   = [RCTConvert BOOL:[source objectForKey:@"isNetwork"]];
+            NSURL* _uri    = [NSURL URLWithString:uri];
+            if(uri && uri.length > 0){
+                // init player && play
+                if(initType == 2){
+                    _player = [[VLCMediaPlayer alloc] initWithOptions:options];
+                }else{
+                    _player = [[VLCMediaPlayer alloc] init];
+                }
+                [_player setDrawable:self];
+                _player.delegate = self;
+                _player.scaleFactor = 0;
+                //设置缓存多少毫秒
+                // [mediaDictonary setObject:@"1500" forKey:@"network-caching"];
+                VLCMedia *media = nil;
+                if(isNetWork){
+                    media = [VLCMedia mediaWithURL:_uri];
+                }else{
+                    media = [VLCMedia mediaWithPath: uri];
+                }
+                if(media){
+                    media.delegate = self;
+                    if(mediaOptions){
+                        [media addOptions:mediaOptions];
+                    }
+                    [media parseWithOptions:VLCMediaParseLocal|VLCMediaFetchLocal|VLCMediaParseNetwork|VLCMediaFetchNetwork];
+                     _player.media = media;
+                }
+                if(autoplay)
+                    [self play];
+                if(self.onVideoLoadStart){
+                    self.onVideoLoadStart(@{
+                                           @"target": self.reactTag
+                                         });
+                }
+            }
+        }
+    @catch(NSException *exception){
+              NSLog(@"%@", exception);
     }
-    _source = source;
-    // [bavv edit start]
-    NSString* uri    = [source objectForKey:@"uri"];
-    BOOL    autoplay = [RCTConvert BOOL:[source objectForKey:@"autoplay"]];
-    NSURL* _uri    = [NSURL URLWithString:uri];
-    NSDictionary* initOptions = [source objectForKey:@"initOptions"];
-
-    _player = [[VLCMediaPlayer alloc] init];
-    _player.libraryInstance.debugLogging = true;
-    _player.libraryInstance.debugLoggingLevel = 3;
-    // [bavv edit end]
-
-    [_player setDrawable:self];
-    _player.delegate = self;
-    _player.scaleFactor = 0;
-
-    VLCMedia *media = [VLCMedia mediaWithURL:_uri];
-
-    for (NSString* option in initOptions) {
-        [media addOption:[option stringByReplacingOccurrencesOfString:@"--" withString:@""]];
-    }
-
-    _player.media = media;
-    [[AVAudioSession sharedInstance] setActive:NO withOptions:AVAudioSessionSetActiveOptionNotifyOthersOnDeactivation error:nil];
-    NSLog(@"autoplay: %i",autoplay);
-    self.onVideoLoadStart(@{
-                           @"target": self.reactTag
-                           });
-//    if(autoplay)
-        [self play];
 }
 
 - (void)onVideoTracks {
@@ -161,12 +209,12 @@ static NSString *const playbackRate = @"rate";
         NSArray *tracksIndexes = [_player audioTrackIndexes];
         int currentTrackIndex = [_player currentAudioTrackIndex];
 
-//         self.onVideoAudioTracks(@{
-//             @"target": self.reactTag,
-//             @"trackNames": tracksNames,
-//             @"trackIndexes": tracksIndexes,
-//             @"currentTrackIndex":[NSNumber numberWithInt:currentTrackIndex]
-//                                 });
+        self.onVideoAudioTracks(@{
+            @"target": self.reactTag,
+            @"trackNames": tracksNames,
+            @"trackIndexes": tracksIndexes,
+            @"currentTrackIndex":[NSNumber numberWithInt:currentTrackIndex]
+                                });
     }
 }
 
@@ -177,13 +225,13 @@ static NSString *const playbackRate = @"rate";
         int currentSubtitleIndex = [_player currentVideoSubTitleIndex];
         float delay = [_player currentVideoSubTitleDelay];
 
-//         self.onVideoSubtitles(@{
-//             @"target": self.reactTag,
-//             @"subtitleNames": subtitleNames,
-//             @"subtitleIndexes": subtitleIndexes,
-//             @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex],
-//             @"delay":[NSNumber numberWithFloat:delay]
-//         });
+        self.onVideoSubtitles(@{
+            @"target": self.reactTag,
+            @"subtitleNames": subtitleNames,
+            @"subtitleIndexes": subtitleIndexes,
+            @"currentSubtitleIndex":[NSNumber numberWithInt:currentSubtitleIndex],
+            @"delay":[NSNumber numberWithFloat:delay]
+        });
     }
 }
 
@@ -195,42 +243,37 @@ static NSString *const playbackRate = @"rate";
 - (void)mediaPlayerStateChanged:(NSNotification *)aNotification
 {
 
-     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-     NSLog(@"userInfo %@",[aNotification userInfo]);
-     NSLog(@"standardUserDefaults %@",defaults);
     if(_player){
+        BOOL isPlaying = _player.isPlaying;
+
         VLCMediaPlayerState state = _player.state;
         switch (state) {
             case VLCMediaPlayerStateOpening:
-                 NSLog(@"VLCMediaPlayerStateOpening %i",1);
                 self.onVideoOpen(@{
                                      @"target": self.reactTag
                                      });
                 break;
             case VLCMediaPlayerStatePaused:
                 _paused = YES;
-                NSLog(@"VLCMediaPlayerStatePaused %i",1);
                 self.onVideoPaused(@{
                                      @"target": self.reactTag
                                      });
                 break;
             case VLCMediaPlayerStateStopped:
-                NSLog(@"VLCMediaPlayerStateStopped %i",1);
                 self.onVideoStopped(@{
                                       @"target": self.reactTag
                                       });
                 break;
             case VLCMediaPlayerStateBuffering:
-                NSLog(@"VLCMediaPlayerStateBuffering %i",1);
-                self.onVideoBuffering(@{
-                                        @"target": self.reactTag
-                                        });
+                self.onVideoBuffering(@{@"target": self.reactTag
+                                      @"target": self.reactTag,
+                                      @"isPlaying": [NSNumber numberWithBool: isPlaying]
+                                      });
                 [self onVideoTracks];
                 [self onSubtitles];
                 break;
             case VLCMediaPlayerStatePlaying:
                 _paused = NO;
-                NSLog(@"VLCMediaPlayerStatePlaying %i",1);
                 self.onVideoPlaying(@{
                                       @"target": self.reactTag,
                                       @"seekable": [NSNumber numberWithBool:[_player isSeekable]],
@@ -238,24 +281,12 @@ static NSString *const playbackRate = @"rate";
                                       });
                 break;
             case VLCMediaPlayerStateEnded:
-                NSLog(@"VLCMediaPlayerStateEnded %i",1);
-                int currentTime   = [[_player time] intValue];
-                int remainingTime = [[_player remainingTime] intValue];
-                int duration      = [_player.media.length intValue];
-
-                self.onVideoEnded(@{
-                                    @"target": self.reactTag,
-                                    @"currentTime": [NSNumber numberWithInt:currentTime],
-                                    @"remainingTime": [NSNumber numberWithInt:remainingTime],
-                                    @"duration":[NSNumber numberWithInt:duration],
-                                    @"position":[NSNumber numberWithFloat:_player.position]
-                                    });
+                self.onVideoEnded(@{@"target": self.reactTag});
                 break;
             case VLCMediaPlayerStateError:
-                NSLog(@"VLCMediaPlayerStateError %i",1);
-//                self.onVideoError(@{
-//                                    @"target": self.reactTag
-//                                    });
+               self.onVideoError(@{
+                                   @"target": self.reactTag
+                                   });
                 [self _release];
                 break;
             default:
