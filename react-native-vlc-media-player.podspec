@@ -5,13 +5,13 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.author       = { 'roshan.milinda' => 'rmilinda@gmail.com' }
   s.license      = 'MIT'
-  s.homepage     = 'https://github.com/razorRun/react-native-vlc-media-player.git'
-  s.source       = { :git => "https://github.com/razorRun/react-native-vlc-media-player.git" }
+  s.homepage     = 'https://github.com/morgunov-ivan/react-native-vlc-media-player.git'
+  s.source       = { :git => "https://github.com/morgunov-ivan/react-native-vlc-media-player.git" }
   s.source_files = 'ios/RCTVLCPlayer/*'
   s.ios.deployment_target = '8.0'
   s.tvos.deployment_target = '12.0'
   s.static_framework = true
   s.dependency 'React'
-  s.ios.dependency 'MobileVLCKit', '3.4.1b13'
-  s.tvos.dependency 'TVVLCKit', '3.4.1b13'
+  s.ios.dependency 'MobileVLCKit', '3.5.1'
+  s.tvos.dependency 'TVVLCKit', '3.5.1'
 end

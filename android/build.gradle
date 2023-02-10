@@ -32,5 +32,5 @@ dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.jar'])
     compileOnly "com.facebook.react:react-native:+"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'org.videolan.android:libvlc-all:3.1.12'
+    implementation 'org.videolan.android:libvlc-all:3.5.1'
 }
